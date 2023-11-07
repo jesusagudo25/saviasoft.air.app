@@ -8,7 +8,7 @@ export default function LoginPage() {
   return (
     <>
       <Helmet>
-        <title> Login | Minimal UI </title>
+      <title> Login | {import.meta.env.VITE_APP_TITLE} </title>
       </Helmet>
 
       <LoginView />

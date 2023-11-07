@@ -8,7 +8,7 @@ export default function AppPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard | Minimal UI </title>
+        <title> Dashboard | {import.meta.env.VITE_APP_TITLE}  </title>
       </Helmet>
 
       <AppView />
