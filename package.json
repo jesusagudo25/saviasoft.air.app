@@ -1,9 +1,8 @@
 {
-  "name": "@minimal/material-kit-react",
-  "author": "minimals.cc",
+  "name": "@jesusagudo25/airquality-app",
+  "author": "jesusagudo25",
   "licence": "MIT",
-  "version": "1.8.0",
-  "private": false,
+  "private": true,  
   "scripts": {
     "dev": "vite",
     "start": "vite preview",
