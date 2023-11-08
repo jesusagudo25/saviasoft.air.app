@@ -1,7 +1,6 @@
 {
-  "name": "@jesusagudo25/airquality-app",
-  "author": "jesusagudo25",
-  "licence": "MIT",
+  "name": "@saviasoft/airquality-app",
+  "author": "saviasoft",
   "private": true,  
   "scripts": {
     "dev": "vite",
