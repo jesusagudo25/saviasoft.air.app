@@ -1,4 +1,3 @@
-import { useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
@@ -7,17 +6,15 @@ import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { alpha, useTheme } from '@mui/material/styles';
-import InputAdornment from '@mui/material/InputAdornment';
 
 import { useRouter } from 'src/routes/hooks';
 
 import { bgGradient } from 'src/theme/css';
 
 import Logo from 'src/components/logo';
-import Iconify from 'src/components/iconify';
+
 
 // ----------------------------------------------------------------------
 
@@ -26,37 +23,15 @@ export default function LoginView() {
 
   const router = useRouter();
 
-  const [showPassword, setShowPassword] = useState(false);
-
   const handleClick = () => {
     router.push('/dashboard');
   };
 
   const renderForm = (
     <>
-      <Stack spacing={3}>
+      <Stack spacing={3} sx={{ mb: 5 }}>
         <TextField name="email" label="Email address" />
 
-        <TextField
-          name="password"
-          label="Password"
-          type={showPassword ? 'text' : 'password'}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
-                  <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
-      </Stack>
-
-      <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{ my: 3 }}>
-        <Link variant="subtitle2" underline="hover" onClick={() => router.push('/forgot-password') }>
-          Forgot password?
-        </Link>
       </Stack>
 
       <LoadingButton
@@ -67,7 +42,7 @@ export default function LoginView() {
         color="inherit"
         onClick={handleClick}
       >
-        Login
+        Send Email
       </LoadingButton>
     </>
   );
@@ -77,7 +52,7 @@ export default function LoginView() {
       sx={{
         ...bgGradient({
           color: alpha(theme.palette.background.default, 0.9),
-          imgUrl: '/assets/background/overlay_4.jpg',
+          imgUrl: '/assets/background/overlay_2.jpg',
         }),
         height: 1,
       }}
@@ -98,12 +73,12 @@ export default function LoginView() {
             maxWidth: 420,
           }}
         >
-          <Typography variant="h4">Sign in to AirQualityApp</Typography>
+          <Typography variant="h4">Forgot your password?</Typography>
 
           <Typography variant="body2" sx={{ mt: 2, mb: 5 }}>
-            Don’t have an account?
-            <Link variant="subtitle2" sx={{ ml: 0.5 }} underline="hover" onClick={() => router.push('/register') }>
-              Get started
+            Already have an account?
+            <Link variant="subtitle2" sx={{ ml: 0.5 }} underline="hover" onClick={() => router.push('/login')}>
+              Sign in
             </Link>
           </Typography>
 

@@ -21,7 +21,7 @@ import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
-export default function LoginView() {
+export default function RegisterView() {
   const theme = useTheme();
 
   const router = useRouter();
@@ -34,7 +34,12 @@ export default function LoginView() {
 
   const renderForm = (
     <>
-      <Stack spacing={3}>
+      <Stack spacing={3} sx={{ mb: 5 }}>
+
+        <TextField name="firstName" label="First name" />
+
+        <TextField name="lastName" label="Last name" />
+
         <TextField name="email" label="Email address" />
 
         <TextField
@@ -53,12 +58,6 @@ export default function LoginView() {
         />
       </Stack>
 
-      <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{ my: 3 }}>
-        <Link variant="subtitle2" underline="hover" onClick={() => router.push('/forgot-password') }>
-          Forgot password?
-        </Link>
-      </Stack>
-
       <LoadingButton
         fullWidth
         size="large"
@@ -67,7 +66,7 @@ export default function LoginView() {
         color="inherit"
         onClick={handleClick}
       >
-        Login
+        Register
       </LoadingButton>
     </>
   );
@@ -77,7 +76,7 @@ export default function LoginView() {
       sx={{
         ...bgGradient({
           color: alpha(theme.palette.background.default, 0.9),
-          imgUrl: '/assets/background/overlay_4.jpg',
+          imgUrl: '/assets/background/overlay_2.jpg',
         }),
         height: 1,
       }}
@@ -98,12 +97,12 @@ export default function LoginView() {
             maxWidth: 420,
           }}
         >
-          <Typography variant="h4">Sign in to AirQualityApp</Typography>
+          <Typography variant="h4">Get started absolutely free.</Typography>
 
           <Typography variant="body2" sx={{ mt: 2, mb: 5 }}>
-            Don’t have an account?
-            <Link variant="subtitle2" sx={{ ml: 0.5 }} underline="hover" onClick={() => router.push('/register') }>
-              Get started
+            Already have an account?
+            <Link variant="subtitle2" sx={{ ml: 0.5 }} underline="hover" onClick={() => router.push('/login')}>
+              Sign in
             </Link>
           </Typography>
 
