@@ -1,4 +1,6 @@
+import axios from 'axios';
 import { useState } from 'react';
+import { useForm, Controller } from 'react-hook-form';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
@@ -26,35 +28,136 @@ export default function RegisterView() {
 
   const router = useRouter();
 
+  const { control, handleSubmit, formState: { errors }, } = useForm();
+
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleClick = () => {
-    router.push('/dashboard');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleClick = (event) => {
+    setIsLoading(true);
+
+    axios.post(`${import.meta.env.VITE_MICRO_SECURTY}/auth/register`, {
+      firstName: event.firstName,
+      lastName: event.lastName,
+      email: event.email,
+      password: event.password,
+    })
+      .then((response) => {
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('id', response.data.id);
+
+        console.log(response.data);
+        setIsLoading(false);
+        router.push('/dashboard');
+      })
+      .catch((error) => {
+        console.log(error);
+        setIsLoading(false);
+      });
   };
 
   const renderForm = (
     <>
       <Stack spacing={3} sx={{ mb: 5 }}>
 
-        <TextField name="firstName" label="First name" />
-
-        <TextField name="lastName" label="Last name" />
-
-        <TextField name="email" label="Email address" />
-
-        <TextField
-          name="password"
-          label="Password"
-          type={showPassword ? 'text' : 'password'}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
-                  <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
-                </IconButton>
-              </InputAdornment>
-            ),
+        <Controller
+          name="firstName"
+          control={control}
+          defaultValue=""
+          rules={{
+            required: 'First name is required',
+            minLength: {
+              value: 2,
+              message: 'First name should be at least 2 characters',
+            },
           }}
+          render={({ field }) => (
+            <TextField
+              fullWidth
+              label="First name"
+              {...field}
+              error={Boolean(errors.firstName)}
+              helperText={errors.firstName ? errors.firstName.message : ''}
+            />
+          )}
+        />
+
+        <Controller
+          name="lastName"
+          control={control}
+          defaultValue=""
+          rules={{
+            required: 'Last name is required',
+            minLength: {
+              value: 2,
+              message: 'Last name should be at least 2 characters',
+            },
+          }}
+          render={({ field }) => (
+            <TextField
+              fullWidth
+              label="Last name"
+              {...field}
+              error={Boolean(errors.lastName)}
+              helperText={errors.lastName ? errors.lastName.message : ''}
+            />
+          )}
+        />
+
+        <Controller
+          name="email"
+          control={control}
+          defaultValue=""
+          rules={{
+            required: 'Email is required',
+            pattern: {
+              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+              message: 'Invalid email address',
+            },
+          }}
+          render={({ field }) => (
+            <TextField
+              fullWidth
+              label="Email address"
+              {...field}
+              error={Boolean(errors.email)}
+              helperText={errors.email ? errors.email.message : ''}
+            />
+          )}
+        />
+
+        <Controller
+          name="password"
+          control={control}
+          defaultValue=""
+          rules={{
+            required: 'Password is required',
+            minLength: {
+              value: 6,
+              message: 'Password should be at least 6 characters',
+            },
+          }}
+          render={({ field }) => ( 
+            <TextField
+            name="password"
+            label="Password"
+            type={showPassword ? 'text' : 'password'}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={() => setShowPassword((prev) => !prev)}>
+                    <Iconify icon={showPassword ? 'ic:outline-visibility-off' : 'ic:outline-visibility'} />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+            fullWidth
+            {...field}
+            error={Boolean(errors.password)}
+            helperText={errors.password ? errors.password.message : ''}
+          />
+          )}
         />
       </Stack>
 
@@ -64,7 +167,8 @@ export default function RegisterView() {
         type="submit"
         variant="contained"
         color="inherit"
-        onClick={handleClick}
+        onClick={handleSubmit(handleClick)}
+        loading={isLoading}
       >
         Register
       </LoadingButton>

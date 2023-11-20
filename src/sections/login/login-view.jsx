@@ -1,4 +1,7 @@
-import { useState } from 'react';
+import axios from 'axios';
+import { useState, useEffect  } from 'react';
+import { useForm, Controller  } from "react-hook-form";
+import { toast, ToastContainer } from 'react-toastify';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
@@ -28,29 +31,111 @@ export default function LoginView() {
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleClick = () => {
-    router.push('/dashboard');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const {control, handleSubmit, formState: { errors } } = useForm();
+
+  const handleClick = (event) => {
+    setIsLoading(true);
+
+    axios.post(`${import.meta.env.VITE_MICRO_SECURTY}/auth/login`, {
+      email: event.email,
+      password: event.password,
+    })
+      .then((response) => {
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('id', response.data.id);
+
+        console.log(response.data);
+        setIsLoading(false);
+        router.push('/dashboard');
+      })
+      .catch((error) => {
+        console.log(error);
+        notifyInvalidPassword();
+        setIsLoading(false);
+      });
   };
+
+  const notifyResetPassword = () => toast("Reset password successfully", {
+    type: 'success',
+    position: 'top-right',
+    autoClose: 3000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+  });
+
+  const notifyInvalidPassword = () => toast("Email or password is invalid", {
+    type: 'error',
+    position: 'top-right',
+    autoClose: 3000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+  });
+
+  useEffect(() => {
+    if(localStorage.getItem('resetPassword')) {
+      notifyResetPassword();
+      localStorage.removeItem('resetPassword');
+    }
+  }, []);
 
   const renderForm = (
     <>
       <Stack spacing={3}>
-        <TextField name="email" label="Email address" />
 
-        <TextField
-          name="password"
-          label="Password"
-          type={showPassword ? 'text' : 'password'}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
-                  <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
-                </IconButton>
-              </InputAdornment>
-            ),
+        <Controller
+          name="email"
+          control={control}
+          defaultValue=""
+          rules={{
+            required: 'Please enter your email address',
           }}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              fullWidth
+              autoComplete="username"
+              type="email"
+              label="Email address"
+              error={Boolean(errors.email)}
+              helperText={errors.email ? errors.email.message : ''}
+            />
+          )}
         />
+
+        <Controller
+          name="password"
+          control={control}
+          defaultValue=""
+          rules={{
+            required: 'Please enter your password',
+          }}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              fullWidth
+              autoComplete="current-password"
+              type={showPassword ? 'text' : 'password'}
+              label="Password"
+              error={Boolean(errors.password)}
+              helperText={errors.password ? errors.password.message : ''}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                      <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          )}
+
+        />
+        
       </Stack>
 
       <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{ my: 3 }}>
@@ -65,7 +150,8 @@ export default function LoginView() {
         type="submit"
         variant="contained"
         color="inherit"
-        onClick={handleClick}
+        onClick={handleSubmit(handleClick)}
+        loading={isLoading}
       >
         Login
       </LoadingButton>
@@ -112,6 +198,8 @@ export default function LoginView() {
           {renderForm}
         </Card>
       </Stack>
+
+      <ToastContainer />
     </Box>
   );
 }
