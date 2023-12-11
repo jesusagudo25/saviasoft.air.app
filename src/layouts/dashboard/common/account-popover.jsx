@@ -16,11 +16,11 @@ import { useRouter } from 'src/routes/hooks';
 
 const MENU_OPTIONS = [
   {
-    label: 'Profile',
+    label: 'Perfil',
     icon: 'eva:person-fill',
   },
   {
-    label: 'Settings',
+    label: 'Configuración',
     icon: 'eva:settings-2-fill',
   },
 ];
@@ -52,7 +52,6 @@ export default function AccountPopover() {
     })
       .then((response) => {
         setAccount(response.data);
-        console.log(response.data);
       })
       .catch((error) => {
         console.log(error);
@@ -135,7 +134,7 @@ export default function AccountPopover() {
           onClick={handleLogout}
           sx={{ typography: 'body2', color: 'error.main', py: 1.5 }}
         >
-          Logout
+          Salir
         </MenuItem>
       </Popover>
     </>

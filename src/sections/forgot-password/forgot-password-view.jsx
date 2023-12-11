@@ -43,14 +43,13 @@ export default function LoginView() {
     })
       .then((response) => {
 
-        console.log(response.data);
         setEmail(event.email);
         setSendEmail(true);
         setIsLoading(false);
 
       })
       .catch((error) => {
-        console.log(error);
+
         setSendEmail(true);
         setEmail(event.email);
         setIsLoading(false);
@@ -65,7 +64,7 @@ export default function LoginView() {
           control={control}
           defaultValue=""
           rules={{
-            required: 'Email is required',
+            required: 'El correo electrónico es requerido',
             pattern: {
               value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
               message: 'Invalid email address',
@@ -74,7 +73,7 @@ export default function LoginView() {
           render={({ field }) => (
             <TextField
               fullWidth
-              label="Email address"
+              label="Correo electrónico"
               {...field}
               error={Boolean(errors.email)}
               helperText={errors.email ? errors.email.message : ''}
@@ -93,7 +92,7 @@ export default function LoginView() {
         onClick={handleSubmit(handleClick)}
         loading={isLoading}
       >
-        Send Email
+        Enviar
       </LoadingButton>
     </>
   );
@@ -132,18 +131,18 @@ export default function LoginView() {
                 <Box sx={{ textAlign: 'center' }}>
                   <Iconify icon="ic:outline-email" width={80} height={80} />
                 </Box>
-                <Typography variant="body2" sx={{ mt: 1, mb: 1 }}>We have sent an email to <strong>
+                <Typography variant="body2" sx={{ mt: 1, mb: 1 }}>Se ha enviado un correo electrónico a <strong>
                   {email}
-                </strong>. Click the link in the email to reset your password.</Typography>
+                </strong>. Sigue las instrucciones del correo electrónico para restablecer tu contraseña.</Typography>
               </>
             ) : (
               <>
-                <Typography variant="h4">Forgot your password?</Typography>
+                <Typography variant="h4">Olvidaste tu contraseña?</Typography>
 
                 <Typography variant="body2" sx={{ mt: 2, mb: 5 }}>
-                  Already have an account?
+                  Ya tienes una cuenta?
                   <Link variant="subtitle2" sx={{ ml: 0.5 }} underline="hover" onClick={() => router.push('/login')}>
-                    Sign in
+                    Iniciar sesión
                   </Link>
                 </Typography>
 

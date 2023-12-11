@@ -8,14 +8,16 @@ const icon = (name) => (
 
 const navConfig = [
   {
-    title: 'dashboard',
+    title: 'Panel',
     path: '/dashboard',
     icon: icon('ic_analytics'),
+    role: ['ADMINISTRADOR', 'USUARIO'],
   },
   {
-    title: 'user',
+    title: 'Usuarios',
     path: '/dashboard/user',
     icon: icon('ic_user'),
+    role: ['ADMINISTRADOR'],
   },
 ];
 

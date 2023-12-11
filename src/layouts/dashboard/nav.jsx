@@ -23,6 +23,9 @@ import navConfig from './config-navigation';
 // ----------------------------------------------------------------------
 
 export default function Nav({ openNav, onCloseNav }) {
+
+  const userRole = localStorage.getItem('role');
+
   const pathname = usePathname();
 
   const upLg = useResponsive('up', 'lg');
@@ -62,7 +65,7 @@ export default function Nav({ openNav, onCloseNav }) {
   const renderMenu = (
     <Stack component="nav" spacing={0.5} sx={{ px: 2 }}>
       {navConfig.map((item) => (
-        <NavItem key={item.title} item={item} />
+        item.role.includes(userRole) && <NavItem key={item.title} item={item} />
       ))}
     </Stack>
   );

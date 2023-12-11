@@ -26,7 +26,7 @@ export default function ResetPasswordView() {
   const theme = useTheme();
 
   const router = useRouter();
-  
+
   const pathname = usePathname();
 
   const { control, handleSubmit, formState: { errors }, getValues } = useForm();
@@ -43,7 +43,7 @@ export default function ResetPasswordView() {
     setIsLoading(true);
 
     const token = pathname.split('/')[2];
-    
+
     axios.patch(`${import.meta.env.VITE_MICRO_SECURTY}/auth/reset-password`, {
       token,
       password: event.password,
@@ -59,7 +59,7 @@ export default function ResetPasswordView() {
         console.log(error);
         setIsLoading(false);
       });
-    
+
   };
 
   const renderForm = (
@@ -70,16 +70,16 @@ export default function ResetPasswordView() {
         control={control}
         defaultValue=""
         rules={{
-          required: 'Password is required',
+          required: 'La contraseña es requerida',
           minLength: {
             value: 6,
-            message: 'Password should be at least 6 characters',
+            message: 'La contraseña debe tener al menos 6 caracteres',
           }
         }}
         render={({ field }) => (
           <TextField
             name="password"
-            label="Password"
+            label="Contraseña"
             type={showPassword ? 'text' : 'password'}
             InputProps={{
               endAdornment: (
@@ -103,17 +103,17 @@ export default function ResetPasswordView() {
         control={control}
         defaultValue=""
         rules={{
-          required: 'Password is required',
+          required: 'La contraseña es requerida',
           minLength: {
             value: 6,
-            message: 'Password should be at least 6 characters',
+            message: 'La contraseña debe tener al menos 6 caracteres',
           },
-          validate: (value) => value === getValues('password') || 'The passwords do not match',
+          validate: (value) => value === getValues('password') || 'Las contraseñas no coinciden',
         }}
         render={({ field }) => (
           <TextField
             name="passwordConfirm"
-            label="Password Confirm"
+            label="Confirmar contraseña"
             type={showPasswordConfirm ? 'text' : 'password'}
             InputProps={{
               endAdornment: (
@@ -141,7 +141,7 @@ export default function ResetPasswordView() {
         onClick={handleSubmit(handleClick)}
         loading={isLoading}
       >
-        Reset Password
+        Restablecer contraseña
       </LoadingButton>
     </Stack>
   );
@@ -172,10 +172,10 @@ export default function ResetPasswordView() {
             maxWidth: 420,
           }}
         >
-          <Typography variant="h4">Reset Password</Typography>
+          <Typography variant="h4">Restablecer contraseña</Typography>
 
           <Typography variant="body2" sx={{ mt: 2, mb: 5 }}>
-            When finished, we will send you to log in again with your new password
+            Cuando termine, le enviaremos a iniciar sesión nuevamente con su nueva contraseña
           </Typography>
 
           <Divider sx={{ my: 3 }} />

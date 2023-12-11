@@ -8,7 +8,7 @@ export default function NotFoundPage() {
   return (
     <>
       <Helmet>
-        <title> 404 Page Not Found </title>
+        <title> Página no encontrada | {import.meta.env.VITE_APP_TITLE} </title>
       </Helmet>
 
       <NotFoundView />

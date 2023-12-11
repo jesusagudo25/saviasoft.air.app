@@ -8,7 +8,7 @@ export default function LoginPage() {
   return (
     <>
       <Helmet>
-      <title> Reset password | {import.meta.env.VITE_APP_TITLE} </title>
+      <title> Restablecer contraseña | {import.meta.env.VITE_APP_TITLE} </title>
       </Helmet>
 
       <ResetPasswordView />

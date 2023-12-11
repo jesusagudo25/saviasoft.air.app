@@ -8,12 +8,12 @@ import Stack from '@mui/material/Stack';
 import Table from '@mui/material/Table';
 import Select from '@mui/material/Select';
 import Button from '@mui/material/Button';
-import { InputLabel } from '@mui/material';
 import Backdrop from '@mui/material/Backdrop';
 import MenuItem from '@mui/material/MenuItem';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import TextField from '@mui/material/TextField';
+import InputLabel from '@mui/material/InputLabel';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import BootstrapDialog from '@mui/material/Dialog';
@@ -45,8 +45,6 @@ export default function UserPage() {
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('asc');
-
-  const [selected, setSelected] = useState([]);
 
   const [orderBy, setOrderBy] = useState('name');
 
@@ -85,6 +83,7 @@ export default function UserPage() {
     setItemSelected(null);
     setOpenModalUser(false);
     setOpenModalPassword(false);
+    reset();
   }
 
   const handleSubmitDialog = async (event) => {
@@ -93,7 +92,8 @@ export default function UserPage() {
     setItemSelected(null);
     setOpenModalUser(false);
 
-    if (itemSelected) {
+    if (id) {
+      
       const { firstName, lastName, email, role } = event;
       await axios.put(`${import.meta.env.VITE_MICRO_SECURTY}/users/${id}`, {
         firstName,
@@ -102,7 +102,14 @@ export default function UserPage() {
         role,
       });
       setUsers(users.map((user) => user.id === id ? { ...user, firstName, lastName, email, role } : user));
-      toastifyMessage('User updated successfully', 'success');
+
+      if(id === JSON.parse(localStorage.getItem('id'))) {
+        localStorage.setItem('role', role);
+        window.location.reload();
+      }
+
+      toastifyMessage('Usuario actualizado correctamente', 'success');
+      reset();
     } else {
       const { firstName, lastName, email, password, role } = event;
       const response = await axios.post(`${import.meta.env.VITE_MICRO_SECURTY}/users`, {
@@ -113,7 +120,8 @@ export default function UserPage() {
         role,
       });
       setUsers([...users, response.data]);
-      toastifyMessage('User created successfully', 'success');
+      toastifyMessage('Usuario creado correctamente', 'success');
+      reset();
     }
 
     setIsLoading(false);
@@ -126,16 +134,16 @@ export default function UserPage() {
     setItemSelected(null);
     setOpenModalPassword(false);
     const { password, passwordConfirm } = event;
-    console.log(password, passwordConfirm);
+
     if (password === passwordConfirm) {
       await axios.patch(`${import.meta.env.VITE_MICRO_SECURTY}/users/${id}/change-password`, {
         password,
         passwordConfirm,
       });
-      toastifyMessage('Password changed successfully', 'success');
+      toastifyMessage('Contraseña actualizada correctamente', 'success');
       reset();
     } else {
-      toastifyMessage('Passwords do not match', 'error');
+      toastifyMessage('Las contraseñas no coinciden', 'error');
       reset();
     }
     setIsLoading(false);
@@ -149,15 +157,6 @@ export default function UserPage() {
       setOrder(isAsc ? 'desc' : 'asc');
       setOrderBy(id);
     }
-  };
-
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelecteds = users.map((n) => n.name);
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -199,13 +198,13 @@ export default function UserPage() {
   return (
     <Container>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-        <Typography variant="h4">Users</Typography>
+        <Typography variant="h4">Usuarios</Typography>
 
         <Button variant="contained" color="inherit" startIcon={<Iconify icon="eva:plus-fill" />} onClick={() => {
           setOpenModalUser(true);
           reset();
         }}>
-          New User
+          Nuevo usuario
         </Button>
       </Stack>
 
@@ -221,15 +220,12 @@ export default function UserPage() {
               <UserTableHead
                 order={order}
                 orderBy={orderBy}
-                rowCount={users.length}
-                numSelected={selected.length}
                 onRequestSort={handleSort}
-                onSelectAllClick={handleSelectAllClick}
                 headLabel={[
-                  { id: 'name', label: 'Name' },
-                  { id: 'email', label: 'Email' },
-                  { id: 'role', label: 'Role' },
-                  { id: 'status', label: 'Status' },
+                  { id: 'name', label: 'Nombre' },
+                  { id: 'email', label: 'Correo electrónico' },
+                  { id: 'role', label: 'Rol' },
+                  { id: 'status', label: 'Estado' },
                   { id: '' },
                 ]}
               />
@@ -238,7 +234,6 @@ export default function UserPage() {
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row) => (
                     <UserTableRow
-                      key={row.id}
                       firstName={row.firstName}
                       lastName={row.lastName}
                       email={row.email}
@@ -275,6 +270,8 @@ export default function UserPage() {
           onPageChange={handleChangePage}
           rowsPerPageOptions={[5, 10, 25]}
           onRowsPerPageChange={handleChangeRowsPerPage}
+          labelRowsPerPage="Filas por página"
+          labelDisplayedRows={({ from, to, count }) => `${from}-${to} de ${count}`}
         />
       </Card>
 
@@ -287,7 +284,7 @@ export default function UserPage() {
         maxWidth='sm'
       >
         <BootstrapDialogTitle id="customized-dialog-title" onClose={handleCloseDialog}>
-          Manage User
+          Gestión de usuarios
         </BootstrapDialogTitle>
         <DialogContent dividers>
           <Stack spacing={2} sx={{
@@ -300,16 +297,16 @@ export default function UserPage() {
               control={control}
               defaultValue=""
               rules={{
-                required: 'First name is required',
+                required: 'El nombre es requerido',
                 minLength: {
                   value: 2,
-                  message: 'First name should be at least 2 characters',
+                  message: 'El nombre debe tener al menos 2 caracteres',
                 },
               }}
               render={({ field }) => (
                 <TextField
                   fullWidth
-                  label="First name"
+                  label="Nombre"
                   {...field}
                   error={Boolean(errors.firstName)}
                   helperText={errors.firstName ? errors.firstName.message : ''}
@@ -322,16 +319,16 @@ export default function UserPage() {
               control={control}
               defaultValue=""
               rules={{
-                required: 'Last name is required',
+                required: 'El apellido es requerido',
                 minLength: {
                   value: 2,
-                  message: 'Last name should be at least 2 characters',
+                  message: 'El apellido debe tener al menos 2 caracteres',
                 },
               }}
               render={({ field }) => (
                 <TextField
                   fullWidth
-                  label="Last name"
+                  label="Apellido"
                   {...field}
                   error={Boolean(errors.lastName)}
                   helperText={errors.lastName ? errors.lastName.message : ''}
@@ -344,16 +341,16 @@ export default function UserPage() {
               control={control}
               defaultValue=""
               rules={{
-                required: 'Email is required',
+                required: 'El correo electrónico es requerido',
                 pattern: {
                   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: 'Invalid email address',
+                  message: 'Correo electrónico inválido',
                 },
               }}
               render={({ field }) => (
                 <TextField
                   fullWidth
-                  label="Email address"
+                  label="Correo electrónico"
                   {...field}
                   error={Boolean(errors.email)}
                   helperText={errors.email ? errors.email.message : ''}
@@ -362,13 +359,13 @@ export default function UserPage() {
             />
 
             <FormControl fullWidth sx={{ mt: 1 }} variant="outlined">
-              <InputLabel id="lenguage-select-label">Role</InputLabel>
+              <InputLabel id="lenguage-select-label">Rol</InputLabel>
               <Controller
                 name="role"
                 control={control}
-                defaultValue="CUSTOMER"
+                defaultValue="CLIENTE"
                 rules={{
-                  required: 'Role is required',
+                  required: 'El rol es requerido',
                 }}
                 render={({ field: { onChange, onBlur, value, name, ref } }) => (
                   <Select
@@ -377,62 +374,23 @@ export default function UserPage() {
                     value={value}
                     onChange={onChange}
                     onBlur={onBlur}
-                    label="Role"
+                    label="Rol"
                   >
-                    <MenuItem value='CUSTOMER'>Customer</MenuItem>
-                    <MenuItem value='ADMIN'>Admin</MenuItem>
+                    <MenuItem value='CLIENTE'>Cliente</MenuItem>
+                    <MenuItem value='ADMINISTRADOR'>Administrador</MenuItem>
                   </Select>
                 )}
               />
             </FormControl>
 
-            {!itemSelected && (
-              <Controller
-                name="password"
-                control={control}
-                defaultValue=""
-                rules={{
-                  required: 'Password is required',
-                  minLength: {
-                    value: 6,
-                    message: 'Password should be at least 6 characters',
-                  },
-                }}
-                render={({ field }) => (
-                  <TextField
-                    fullWidth
-                    label="Password"
-                    {...field}
-                    type={showPassword ? 'text' : 'password'}
-                    error={Boolean(errors.password)}
-                    helperText={errors.password ? errors.password.message : ''}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton
-                            aria-label="toggle password visibility"
-                            onClick={() => setShowPassword(!showPassword)}
-                            onMouseDown={(event) => event.preventDefault()}
-                            edge="end"
-                          >
-                            {showPassword ? <Iconify icon="eva:eye-fill" /> : <Iconify icon="eva:eye-off-fill" />}
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                )}
-              />
-            )}
-
           </Stack>
         </DialogContent>
         <DialogActions>
           <Button size="large" onClick={handleCloseDialog}  >
-            Cancel
+            Cancelar
           </Button>
           <Button size="large" autoFocus disabled={isLoading} onClick={handleSubmit(handleSubmitDialog)}>
-            Save
+            Guardar
           </Button>
         </DialogActions>
       </BootstrapDialog>
@@ -444,7 +402,7 @@ export default function UserPage() {
         maxWidth='sm'
       >
         <BootstrapDialogTitle id="customized-dialog-title" onClose={handleCloseDialog}>
-          Manage User
+          Cambiar contraseña
         </BootstrapDialogTitle>
         <DialogContent dividers>
           <Stack spacing={3} sx={{ 
@@ -457,16 +415,16 @@ export default function UserPage() {
               control={control}
               defaultValue=""
               rules={{
-                required: 'Password is required',
+                required: 'La contraseña es requerida',
                 minLength: {
                   value: 6,
-                  message: 'Password should be at least 6 characters',
+                  message: 'La contraseña debe tener al menos 6 caracteres',
                 }
               }}
               render={({ field }) => (
                 <TextField
                   name="password"
-                  label="Password"
+                  label="Contraseña"
                   type={showPassword ? 'text' : 'password'}
                   InputProps={{
                     endAdornment: (
@@ -490,17 +448,17 @@ export default function UserPage() {
               control={control}
               defaultValue=""
               rules={{
-                required: 'Password is required',
+                required: 'La contraseña es requerida',
                 minLength: {
                   value: 6,
-                  message: 'Password should be at least 6 characters',
+                  message: 'La contraseña debe tener al menos 6 caracteres',
                 },
-                validate: (value) => value === getValues('password') || 'The passwords do not match',
+                validate: (value) => value === getValues('password') || 'Las contraseñas no coinciden',
               }}
               render={({ field }) => (
                 <TextField
                   name="passwordConfirm"
-                  label="Password Confirm"
+                  label="Confirmar contraseña"
                   type={showPasswordConfirm ? 'text' : 'password'}
                   InputProps={{
                     endAdornment: (
@@ -522,10 +480,10 @@ export default function UserPage() {
         </DialogContent>
         <DialogActions>
           <Button size="large" onClick={handleCloseDialog}  >
-            Cancel
+            Cancelar
           </Button>
           <Button size="large" autoFocus disabled={isLoading} onClick={handleSubmit(handleChangePassword)}>
-            Save
+            Guardar
           </Button>
         </DialogActions>
       </BootstrapDialog>

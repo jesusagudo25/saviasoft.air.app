@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { useState, useEffect  } from 'react';
-import { useForm, Controller  } from "react-hook-form";
+import { useState, useEffect } from 'react';
+import { useForm, Controller } from "react-hook-form";
 import { toast, ToastContainer } from 'react-toastify';
 
 import Box from '@mui/material/Box';
@@ -33,7 +33,7 @@ export default function LoginView() {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const {control, handleSubmit, formState: { errors } } = useForm();
+  const { control, handleSubmit, formState: { errors } } = useForm();
 
   const handleClick = (event) => {
     setIsLoading(true);
@@ -45,6 +45,7 @@ export default function LoginView() {
       .then((response) => {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('id', response.data.id);
+        localStorage.setItem('role', response.data.role);
 
         console.log(response.data);
         setIsLoading(false);
@@ -57,7 +58,7 @@ export default function LoginView() {
       });
   };
 
-  const notifyResetPassword = () => toast("Reset password successfully", {
+  const notifyResetPassword = () => toast("Se ha restablecido su contraseña correctamente.", {
     type: 'success',
     position: 'top-right',
     autoClose: 3000,
@@ -66,7 +67,7 @@ export default function LoginView() {
     pauseOnHover: true,
   });
 
-  const notifyInvalidPassword = () => toast("Email or password is invalid", {
+  const notifyInvalidPassword = () => toast("El correo electrónico o la contraseña son incorrectos.", {
     type: 'error',
     position: 'top-right',
     autoClose: 3000,
@@ -76,7 +77,7 @@ export default function LoginView() {
   });
 
   useEffect(() => {
-    if(localStorage.getItem('resetPassword')) {
+    if (localStorage.getItem('resetPassword')) {
       notifyResetPassword();
       localStorage.removeItem('resetPassword');
     }
@@ -91,7 +92,7 @@ export default function LoginView() {
           control={control}
           defaultValue=""
           rules={{
-            required: 'Please enter your email address',
+            required: 'Por favor, ingrese su correo electrónico.',
           }}
           render={({ field }) => (
             <TextField
@@ -99,7 +100,7 @@ export default function LoginView() {
               fullWidth
               autoComplete="username"
               type="email"
-              label="Email address"
+              label="Correo electrónico"
               error={Boolean(errors.email)}
               helperText={errors.email ? errors.email.message : ''}
             />
@@ -111,7 +112,7 @@ export default function LoginView() {
           control={control}
           defaultValue=""
           rules={{
-            required: 'Please enter your password',
+            required: 'Por favor, ingrese su contraseña.',
           }}
           render={({ field }) => (
             <TextField
@@ -119,7 +120,7 @@ export default function LoginView() {
               fullWidth
               autoComplete="current-password"
               type={showPassword ? 'text' : 'password'}
-              label="Password"
+              label="Contraseña"
               error={Boolean(errors.password)}
               helperText={errors.password ? errors.password.message : ''}
               InputProps={{
@@ -135,12 +136,12 @@ export default function LoginView() {
           )}
 
         />
-        
+
       </Stack>
 
       <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{ my: 3 }}>
-        <Link variant="subtitle2" underline="hover" onClick={() => router.push('/forgot-password') }>
-          Forgot password?
+        <Link variant="subtitle2" underline="hover" onClick={() => router.push('/forgot-password')}>
+          Olvidaste tu contraseña?
         </Link>
       </Stack>
 
@@ -153,7 +154,7 @@ export default function LoginView() {
         onClick={handleSubmit(handleClick)}
         loading={isLoading}
       >
-        Login
+        Iniciar sesión
       </LoadingButton>
     </>
   );
@@ -184,14 +185,7 @@ export default function LoginView() {
             maxWidth: 420,
           }}
         >
-          <Typography variant="h4">Sign in to AirQualityApp</Typography>
-
-          <Typography variant="body2" sx={{ mt: 2, mb: 5 }}>
-            Don’t have an account?
-            <Link variant="subtitle2" sx={{ ml: 0.5 }} underline="hover" onClick={() => router.push('/register') }>
-              Get started
-            </Link>
-          </Typography>
+          <Typography variant="h4">Iniciar sesión</Typography>
 
           <Divider sx={{ my: 3 }} />
 

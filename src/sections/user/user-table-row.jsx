@@ -109,9 +109,9 @@ export default function UserTableRow({
             async () => {
               setIsLoading(true);
               if(status) {
-                toastifyMessage('Status changed successfully', 'success');
+                toastifyMessage('El estado del usuario ha cambiado a inactivo', 'success');
               } else {
-                toastifyMessage('Status changed successfully', 'error');
+                toastifyMessage('El estado del usuario ha cambiado a activo', 'success');
               }
               setUsers(users.map((user) => user.id === id ? { ...user, status: !status } : user));
               await axios.patch(`${import.meta.env.VITE_MICRO_SECURTY}/users/${id}/status`, {
@@ -152,7 +152,7 @@ export default function UserTableRow({
         }
         }>
           <Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
-          Edit
+          Editar
         </MenuItem>
 
         <MenuItem onClick={()=>{
@@ -160,7 +160,7 @@ export default function UserTableRow({
           setOpenModalPassword(true);
         }} sx={{ color: 'error.main' }}>
           <Iconify icon="mdi:password" sx={{ mr: 2 }} />
-          Change Password
+          Cambiar contraseña
         </MenuItem>
       </Popover>
     </>

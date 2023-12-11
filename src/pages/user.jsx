@@ -8,7 +8,7 @@ export default function UserPage() {
   return (
     <>
       <Helmet>
-        <title> User | {import.meta.env.VITE_APP_TITLE} </title>
+        <title> Usuarios | {import.meta.env.VITE_APP_TITLE} </title>
       </Helmet>
 
       <UserView />
