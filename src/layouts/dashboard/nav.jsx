@@ -136,7 +136,11 @@ Nav.propTypes = {
 function NavItem({ item }) {
   const pathname = usePathname();
 
-  const active = item.path === pathname;
+  let active = item.path === pathname;
+
+  if(item.path === '/dashboard/user' && pathname.includes('device')) {
+    active = true;
+  }
 
   return (
     <ListItemButton

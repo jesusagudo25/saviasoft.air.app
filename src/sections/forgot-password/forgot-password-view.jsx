@@ -126,7 +126,7 @@ export default function LoginView() {
           {
             sendEmail ? (
               <>
-                <Typography variant="h4">Check your email</Typography>
+                <Typography variant="h4">Revisa tu correo electrónico</Typography>
                 <Divider sx={{ my: 3 }} />
                 <Box sx={{ textAlign: 'center' }}>
                   <Iconify icon="ic:outline-email" width={80} height={80} />

@@ -12,11 +12,8 @@ import TableCell from '@mui/material/TableCell';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 
-import { useRouter } from 'src/routes/hooks';
-
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
-
 
 const ButtonSwitch = styled(Switch)(({ theme }) => ({
   width: 28,
@@ -63,24 +60,20 @@ const ButtonSwitch = styled(Switch)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function UserTableRow({
+export default function DeviceTableRow({
   row,
   setIsLoading,
-  users,
-  setUsers,
+  devices,
+  setDevices,
   id,
   setItemSelected,
   toastifyMessage,
   setValue,
-  setOpenModalUser,
-  setOpenModalPassword,
+  setOpenModalDevice
 }) {
-
-  const router = useRouter();
-
-  const {firstName, lastName, role, email, status} = row;
-  
   const [open, setOpen] = useState(null);
+
+  const { name, location, serialNumber, uid, status } = row;
 
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
@@ -97,41 +90,37 @@ export default function UserTableRow({
         <TableCell component="th" scope="row">
           <Stack direction="row" alignItems="center" spacing={2}>
             <Typography variant="subtitle2" noWrap>
-              {firstName} {lastName}
+              {name}
             </Typography>
           </Stack>
         </TableCell>
 
-        <TableCell>{email}</TableCell>
-
         <TableCell>
-          <Label color={(role === 'CLIENTE' && 'warning') || 'success'}>{role}</Label>
+          <Label color={(serialNumber && 'success') || 'error'}>{serialNumber || 'N/A'}</Label>
         </TableCell>
 
-        <TableCell>
-          <IconButton onClick={() => { router.push(`/dashboard/user/${id}/device`) }} sx = {{ color: 'primary.main' }}>
-            {/* Devices */}
-            <Iconify icon="mdi:cellphone"  />
-          </IconButton>
-        </TableCell>
-        
+        <TableCell>{location || 'N/A'}</TableCell>
+
+        <TableCell>{uid || 'N/A'}</TableCell>
+
         <TableCell>
           <ButtonSwitch checked={status} inputProps={{ 'aria-label': 'ant design' }} onClick={
             async () => {
               setIsLoading(true);
               if(status) {
-                toastifyMessage('El estado del usuario ha cambiado a inactivo', 'success');
+                toastifyMessage('El estado del dispositivo ha cambiado a inactivo', 'success');
               } else {
-                toastifyMessage('El estado del usuario ha cambiado a activo', 'success');
+                toastifyMessage('El estado del dispositivo ha cambiado a activo', 'success');
               }
-              setUsers(users.map((user) => user.id === id ? { ...user, status: !status } : user));
-              await axios.patch(`${import.meta.env.VITE_MICRO_SECURTY}/users/${id}/status`, {
+              setDevices(devices.map((device) => device.id === id ? { ...device, status: !status } : device));
+              await axios.patch(`${import.meta.env.VITE_MICRO_ENTITY}/devices/${id}/status`, {
                 status: !status
               });
               setIsLoading(false);
             }
           } />
         </TableCell>
+
 
         <TableCell align="right">
           <IconButton onClick={handleOpenMenu}>
@@ -152,11 +141,10 @@ export default function UserTableRow({
       >
         <MenuItem onClick={ () => {
           setItemSelected(id);
-          setOpenModalUser(true);
-          setValue('firstName', firstName);
-          setValue('lastName', lastName);
-          setValue('email', email);
-          setValue('role', role);
+          setOpenModalDevice(true);
+          setValue('name', name);
+          setValue('location', location);
+          setValue('serialNumber', serialNumber);
 
           handleCloseMenu();
         }
@@ -165,27 +153,21 @@ export default function UserTableRow({
           Editar
         </MenuItem>
 
-        <MenuItem onClick={()=>{
-          setItemSelected(id);
-          setOpenModalPassword(true);
-        }} sx={{ color: 'error.main' }}>
-          <Iconify icon="mdi:password" sx={{ mr: 2 }} />
-          Cambiar contraseña
-        </MenuItem>
       </Popover>
     </>
   );
 }
 
-UserTableRow.propTypes = {
+DeviceTableRow.propTypes = {
   row: PropTypes.object,
+  status: PropTypes.string,
   setIsLoading: PropTypes.func,
-  users: PropTypes.array,
-  setUsers: PropTypes.func,
+  devices: PropTypes.array,
+  setDevices: PropTypes.func,
   id: PropTypes.any,
   setItemSelected: PropTypes.func,
   toastifyMessage: PropTypes.func,
   setValue: PropTypes.func,
-  setOpenModalUser: PropTypes.func,
-  setOpenModalPassword: PropTypes.func,
+  setOpenModalDevice: PropTypes.func,
+
 };

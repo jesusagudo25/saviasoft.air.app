@@ -225,6 +225,7 @@ export default function UserPage() {
                   { id: 'name', label: 'Nombre' },
                   { id: 'email', label: 'Correo electrónico' },
                   { id: 'role', label: 'Rol' },
+                  { id: 'devices', label: 'Dispositivos' },
                   { id: 'status', label: 'Estado' },
                   { id: '' },
                 ]}
@@ -234,11 +235,8 @@ export default function UserPage() {
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row) => (
                     <UserTableRow
-                      firstName={row.firstName}
-                      lastName={row.lastName}
-                      email={row.email}
-                      role={row.role}
-                      status={row.status}
+                      key={row.id}
+                      row={row}
                       setIsLoading={setIsLoading}
                       users={users}
                       setUsers={setUsers}
