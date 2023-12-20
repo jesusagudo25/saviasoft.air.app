@@ -50,10 +50,7 @@ const Chart = styled(ApexChart)(({ theme }) => ({
     '& .apexcharts-legend': {
       padding: 0,
     },
-    '& .apexcharts-legend-series': {
-      display: 'inline-flex !important',
-      alignItems: 'center',
-    },
+
     '& .apexcharts-legend-marker': {
       marginRight: 8,
     },

@@ -38,7 +38,7 @@ export default function LoginView() {
   const handleClick = (event) => {
     setIsLoading(true);
 
-    axios.post(`${import.meta.env.VITE_MICRO_SECURTY}/auth/forgot-password`, {
+    axios.post(`${import.meta.env.VITE_CLOUD_GATEWAY}${import.meta.env.VITE_MICRO_SECURTY}/auth/forgot-password`, {
       email: event.email,
     })
       .then((response) => {

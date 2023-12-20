@@ -125,7 +125,7 @@ export default function UserTableRow({
                 toastifyMessage('El estado del usuario ha cambiado a activo', 'success');
               }
               setUsers(users.map((user) => user.id === id ? { ...user, status: !status } : user));
-              await axios.patch(`${import.meta.env.VITE_MICRO_SECURTY}/users/${id}/status`, {
+              await axios.patch(`${import.meta.env.VITE_CLOUD_GATEWAY}${import.meta.env.VITE_MICRO_SECURTY}/users/${id}/status`, {
                 status: !status
               });
               setIsLoading(false);

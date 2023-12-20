@@ -4,9 +4,7 @@ import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Drawer from '@mui/material/Drawer';
-import Avatar from '@mui/material/Avatar';
 import { alpha } from '@mui/material/styles';
-import Typography from '@mui/material/Typography';
 import ListItemButton from '@mui/material/ListItemButton';
 
 import { usePathname } from 'src/routes/hooks';
@@ -40,26 +38,14 @@ export default function Nav({ openNav, onCloseNav }) {
   const renderAccount = (
     <Box
       sx={{
-        my: 3,
         mx: 2.5,
         py: 2,
         px: 2.5,
         display: 'flex',
         borderRadius: 1.5,
         alignItems: 'center',
-        bgcolor: (theme) => alpha(theme.palette.grey[500], 0.12),
       }}
-    >
-      <Avatar src='https://clutchco-static.s3.amazonaws.com/s3fs-public/logos/saviasoft_logo.png?VersionId=jD_5XzC0QMEcLCV9sietAtwNAnS60uOA' alt="photoURL" />
-
-      <Box sx={{ ml: 2 }}>
-        <Typography variant="subtitle2">SaviaSoft</Typography>
-
-        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          Somos Software
-        </Typography>
-      </Box>
-    </Box>
+    />
   );
 
   const renderMenu = (

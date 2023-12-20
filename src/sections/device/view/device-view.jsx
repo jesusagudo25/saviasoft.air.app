@@ -91,7 +91,7 @@ export default function DevicePage() {
     if (id) {
       
       const { name, location, serialNumber } = event;
-      await axios.put(`${import.meta.env.VITE_MICRO_ENTITY}/devices/${id}`, {
+      await axios.put(`${import.meta.env.VITE_CLOUD_GATEWAY}${import.meta.env.VITE_MICRO_ENTITY}/devices/${id}`, {
         name,
         location,
         serialNumber
@@ -103,11 +103,12 @@ export default function DevicePage() {
     } else {
       const { name, location, serialNumber } = event;
       console.log(event);
-      const response = await axios.post(`${import.meta.env.VITE_MICRO_ENTITY}/devices`, {
+      const response = await axios.post(`${import.meta.env.VITE_CLOUD_GATEWAY}${import.meta.env.VITE_MICRO_ENTITY}/devices`, {
         name,
         location,
         serialNumber,
-        userId
+        userId,
+        userName: `${userName || 'No asignado'}`
       });
       setDevices([...devices, response.data]);
       toastifyMessage('Dispositivo creado correctamente', 'success');
@@ -152,7 +153,7 @@ export default function DevicePage() {
 
   useEffect(() => {
     setIsLoading(true);
-    axios.get(`${import.meta.env.VITE_MICRO_ENTITY}/devices/byUser/${userId}`)
+    axios.get(`${import.meta.env.VITE_CLOUD_GATEWAY}${import.meta.env.VITE_MICRO_ENTITY}/devices/byUser/${userId}`)
       .then((response) => {
         setDevices(response.data);
         setIsLoading(false);
@@ -166,7 +167,7 @@ export default function DevicePage() {
   useEffect(() => {
     setIsLoading(true);
 
-    axios.get(`${import.meta.env.VITE_MICRO_SECURTY}/users/${userId}`)
+    axios.get(`${import.meta.env.VITE_CLOUD_GATEWAY}${import.meta.env.VITE_MICRO_SECURTY}/users/${userId}`)
       .then((response) => {
         setUserName(`${response.data.firstName} ${response.data.lastName}`);
         setIsLoading(false);

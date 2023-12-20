@@ -113,7 +113,7 @@ export default function DeviceTableRow({
                 toastifyMessage('El estado del dispositivo ha cambiado a activo', 'success');
               }
               setDevices(devices.map((device) => device.id === id ? { ...device, status: !status } : device));
-              await axios.patch(`${import.meta.env.VITE_MICRO_ENTITY}/devices/${id}/status`, {
+              await axios.patch(`${import.meta.env.VITE_CLOUD_GATEWAY}${import.meta.env.VITE_MICRO_ENTITY}/devices/${id}/status`, {
                 status: !status
               });
               setIsLoading(false);
@@ -160,7 +160,6 @@ export default function DeviceTableRow({
 
 DeviceTableRow.propTypes = {
   row: PropTypes.object,
-  status: PropTypes.string,
   setIsLoading: PropTypes.func,
   devices: PropTypes.array,
   setDevices: PropTypes.func,

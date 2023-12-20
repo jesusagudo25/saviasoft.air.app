@@ -21,7 +21,7 @@ export default function DeviceTableToolbar({ filterName, onFilterName }) {
       <OutlinedInput
           value={filterName}
           onChange={onFilterName}
-          placeholder="Buscar..."
+          placeholder="Buscar dispositivo..."
           startAdornment={
             <InputAdornment position="start">
               <Iconify

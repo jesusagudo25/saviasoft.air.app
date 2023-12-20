@@ -44,7 +44,7 @@ export default function ResetPasswordView() {
 
     const token = pathname.split('/')[2];
 
-    axios.patch(`${import.meta.env.VITE_MICRO_SECURTY}/auth/reset-password`, {
+    axios.patch(`${import.meta.env.VITE_CLOUD_GATEWAY}${import.meta.env.VITE_MICRO_SECURTY}/auth/reset-password`, {
       token,
       password: event.password,
       passwordConfirm: event.passwordConfirm,

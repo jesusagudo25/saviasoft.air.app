@@ -18,10 +18,7 @@ const MENU_OPTIONS = [
   {
     label: 'Perfil',
     icon: 'eva:person-fill',
-  },
-  {
-    label: 'Configuración',
-    icon: 'eva:settings-2-fill',
+    linkTo: '/dashboard/profile',
   },
 ];
 
@@ -45,7 +42,7 @@ export default function AccountPopover() {
   const getProfile = () => {
     const id = localStorage.getItem('id');
     const token = localStorage.getItem('token');
-    axios.get(`${import.meta.env.VITE_MICRO_SECURTY}/users/${id}`, {
+    axios.get(`${import.meta.env.VITE_CLOUD_GATEWAY}${import.meta.env.VITE_MICRO_SECURTY}/users/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -121,7 +118,7 @@ export default function AccountPopover() {
         <Divider sx={{ borderStyle: 'dashed' }} />
 
         {MENU_OPTIONS.map((option) => (
-          <MenuItem key={option.label} onClick={handleClose}>
+          <MenuItem key={option.label} onClick={() => router.push(option.linkTo)} >
             {option.label}
           </MenuItem>
         ))}

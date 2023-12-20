@@ -95,7 +95,7 @@ export default function UserPage() {
     if (id) {
       
       const { firstName, lastName, email, role } = event;
-      await axios.put(`${import.meta.env.VITE_MICRO_SECURTY}/users/${id}`, {
+      await axios.put(`${import.meta.env.VITE_CLOUD_GATEWAY}${import.meta.env.VITE_MICRO_SECURTY}/users/${id}`, {
         firstName,
         lastName,
         email,
@@ -112,7 +112,7 @@ export default function UserPage() {
       reset();
     } else {
       const { firstName, lastName, email, password, role } = event;
-      const response = await axios.post(`${import.meta.env.VITE_MICRO_SECURTY}/users`, {
+      const response = await axios.post(`${import.meta.env.VITE_CLOUD_GATEWAY}${import.meta.env.VITE_MICRO_SECURTY}/users`, {
         firstName,
         lastName,
         email,
@@ -136,7 +136,7 @@ export default function UserPage() {
     const { password, passwordConfirm } = event;
 
     if (password === passwordConfirm) {
-      await axios.patch(`${import.meta.env.VITE_MICRO_SECURTY}/users/${id}/change-password`, {
+      await axios.patch(`${import.meta.env.VITE_CLOUD_GATEWAY}${import.meta.env.VITE_MICRO_SECURTY}/users/${id}/change-password`, {
         password,
         passwordConfirm,
       });
@@ -183,7 +183,7 @@ export default function UserPage() {
 
   useEffect(() => {
     setIsLoading(true);
-    axios.get(`${import.meta.env.VITE_MICRO_SECURTY}/users`)
+    axios.get(`${import.meta.env.VITE_CLOUD_GATEWAY}${import.meta.env.VITE_MICRO_SECURTY}/users`)
       .then((response) => {
         setUsers(response.data);
         setIsLoading(false);

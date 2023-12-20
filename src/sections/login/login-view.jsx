@@ -38,7 +38,7 @@ export default function LoginView() {
   const handleClick = (event) => {
     setIsLoading(true);
 
-    axios.post(`${import.meta.env.VITE_MICRO_SECURTY}/auth/login`, {
+    axios.post(`${import.meta.env.VITE_CLOUD_GATEWAY}${import.meta.env.VITE_MICRO_SECURTY}/auth/login`, {
       email: event.email,
       password: event.password,
     })
