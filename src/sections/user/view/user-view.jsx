@@ -100,16 +100,24 @@ export default function UserPage() {
         lastName,
         email,
         role,
-      });
-      setUsers(users.map((user) => user.id === id ? { ...user, firstName, lastName, email, role } : user));
+      })
+      .then((response) => {
 
-      if(id === JSON.parse(localStorage.getItem('id'))) {
-        localStorage.setItem('role', role);
-        window.location.reload();
-      }
+        setUsers(users.map((user) => user.id === id ? { ...user, firstName, lastName, email, role } : user));
 
-      toastifyMessage('Usuario actualizado correctamente', 'success');
-      reset();
+        if(id === JSON.parse(localStorage.getItem('id'))) {
+          localStorage.setItem('role', role);
+        }
+
+        if(response?.data?.token) {
+          localStorage.setItem('token', response.data.token);
+          window.location.reload();
+        }
+  
+        toastifyMessage('Usuario actualizado correctamente', 'success');
+        reset();
+      })
+
     } else {
       const { firstName, lastName, email, password, role } = event;
       const response = await axios.post(`${import.meta.env.VITE_CLOUD_GATEWAY}${import.meta.env.VITE_MICRO_SECURTY}/users`, {

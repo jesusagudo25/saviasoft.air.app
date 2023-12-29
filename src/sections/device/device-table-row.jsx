@@ -145,6 +145,7 @@ export default function DeviceTableRow({
           setValue('name', name);
           setValue('location', location);
           setValue('serialNumber', serialNumber);
+          setValue('uid', uid);
 
           handleCloseMenu();
         }

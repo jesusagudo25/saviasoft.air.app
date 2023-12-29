@@ -32,7 +32,7 @@ export default function AppDeviceReadings({ title, subheader, series, labels, ..
   });
 
   return (
-    <Card {...other}>
+    <Card {...other} sx={{ height: '100%', overflow: 'visible' }}>
       
       <CardHeader title={title} subheader={subheader} />
 

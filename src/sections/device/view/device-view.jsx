@@ -90,24 +90,26 @@ export default function DevicePage() {
 
     if (id) {
       
-      const { name, location, serialNumber } = event;
+      const { name, location, serialNumber, uid } = event;
       await axios.put(`${import.meta.env.VITE_CLOUD_GATEWAY}${import.meta.env.VITE_MICRO_ENTITY}/devices/${id}`, {
         name,
         location,
-        serialNumber
+        serialNumber,
+        uid,
       });
-      setDevices(devices.map((device) => device.id === id ? { ...device, name, location, serialNumber } : device));
+      setDevices(devices.map((device) => device.id === id ? { ...device, name, location, serialNumber, uid } : device));
 
       toastifyMessage('Dispositivo actualizado correctamente', 'success');
       reset();
     } else {
-      const { name, location, serialNumber } = event;
-      console.log(event);
+      const { name, location, serialNumber, uid } = event;
+
       const response = await axios.post(`${import.meta.env.VITE_CLOUD_GATEWAY}${import.meta.env.VITE_MICRO_ENTITY}/devices`, {
         name,
         location,
         serialNumber,
         userId,
+        uid,
         userName: `${userName || 'No asignado'}`
       });
       setDevices([...devices, response.data]);
@@ -328,6 +330,25 @@ export default function DevicePage() {
                 />
               )}
             />
+
+            <Controller
+              name="uid"
+              control={control}
+              defaultValue=""
+              rules={{
+                required: 'El UID es requerido',
+              }}                
+              render={({ field }) => (
+                <TextField
+                  fullWidth
+                  label="UID"
+                  {...field}
+                  error={Boolean(errors.uid)}
+                  helperText={errors.uid ? errors.uid.message : ''}
+                />
+              )}
+            />
+            
 
           </Stack>
         </DialogContent>

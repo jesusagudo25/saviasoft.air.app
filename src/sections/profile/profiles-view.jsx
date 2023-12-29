@@ -128,6 +128,11 @@ export default function ProfilesView() {
       })
         .then((response) => {
           setIsLoading(false);
+          if(response?.data?.token) {
+            localStorage.setItem('token', response.data.token);
+            window.location.reload();
+          }
+  
         })
         .catch((error) => {
           console.log(error);
